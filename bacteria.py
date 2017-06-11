@@ -18,6 +18,7 @@ class Organism:
         self.score = self.getScore(False, False)
         self.genelist = self.getGenes()
 
+    #refresh variables when new generation is produced
     def refreshGenes(self, genome):
         self.genome = genome
         self.score = self.getScore(False, False)
@@ -90,6 +91,7 @@ class Organism:
 
         return sequence
 
+    #given a genome and environmental variables, determine an organisms fitness score
     def getScore(self, switch1, switch2):
         temp_score = 0
         c = conn.cursor()
@@ -188,6 +190,8 @@ class Organism:
 
         return temp_score
 
+    #given a genome, obtain a list of genes present in an organism
+    #add condiion so that essential genes are not counted twice
     def getGenes(self):
         gene_list= []
         c = conn.cursor()
@@ -306,15 +310,15 @@ class Organism:
 
         return gene_list
 
-    #generate genome for initial populations
+    #generate mutation throughout an organims genome (called during new generation)
     def generateMutation(self):
         temp_genome = ''
         j = 0
         while j < len(self.genome):
              temp_letter = self.genome[j]
-             lucky_number = randint(1,60)
-             #conditions are right for a switch
-             if(lucky_number == 12):
+             lucky_number = randint(1,200)
+             #picks number between 1 and 60. If number = 36, flips 0 to 1 or vice versa.
+             if(lucky_number == 36):
                 if(self.genome[j] == '0'):
                     temp_genome += '1'
                 else:
@@ -325,35 +329,33 @@ class Organism:
         self.genome = ''
         self.genome = temp_genome
 
-    #generate genome for initial populations
+    #updates sum of populations fitness
     def updateTotalScore(self):
+        #if indivdual score < 600, it lacks essential genes to survive.
         if (self.score < 600):
             tempp_score = 0
         else:
             tempp_score = self.score
         return tempp_score
 
-    def getProb(self, global_score):
-        probability = 2.2333
-        if(self.score < 600):
-            probability = 0.0
-        else:
-            probability = Decimal(Decimal(self.score) / Decimal(global_score))
-        self.probability = int(float(probability) * 1000000)
-
+#selects genes in current generation to reproduce for next generation
 def selectNextGeneration(inputOrgList):
     #initialize list
     list = []
+    #creates a list of size = sum of all organisms finess scores.
     for r in range(100):
         r = inputOrgList[r]
         k = 0
+        #if indivdual score < 600, it lacks essential genes to survive.
         if(r.score > 600):
+            #higher score = more entries in list = better probability of getting selected
             while k < r.score:
                 list.append(r)
                 k += 1
     complete_list = random.sample(list, 20)
     return complete_list
 
+#uniform crossover ratio of 0.5 for 2 randomly selected organisms
 def crossOver(inputOrgList, nextGenList):
 
     crossNextGen = []
@@ -361,9 +363,7 @@ def crossOver(inputOrgList, nextGenList):
     while(len(nextGenList) > 0):
         entry1 = nextGenList.pop()
         entry2 = nextGenList.pop()
-        #print("Mom: " + entry1.genome)
-        #print("Dad: " + entry2.genome)
-        #print('\n')
+
         child = 1
         for i in range(1,11):
             rand1 = random.randint(0,1)
@@ -376,7 +376,7 @@ def crossOver(inputOrgList, nextGenList):
             rand8 = random.randint(0,1)
             rand9 = random.randint(0,1)
             rand10 = random.randint(0,1)
-
+            #0: gets gene from dad. 1: gets gene from mom.
             if(rand1 == 0):
                 genename1 = entry1.genome[0:6]
             elif(rand1 == 1):
@@ -420,34 +420,36 @@ def crossOver(inputOrgList, nextGenList):
 
             newSequence = (genename1 + genename2 + genename3 + genename4 + genename5 + genename6 + genename7 + genename8 + genename9 + genename10)
             crossNextGen.append(newSequence)
-            #print(genename1, genename2, genename3, genename4, genename5, genename6, genename7, genename8, genename9, genename10)
-            #print(rand1, rand2, rand3, rand4)
 
     return crossNextGen
 
-    #print(nextGenList)
-
+#replaces the 100 previous organism's genomes with tose produced from crossover(). Also mutates.
 def insertnewGenes(inputOrgList, crossNextGen):
     outputNewGene = []
+    global_fitness_score = 0
     for r in range(100):
         p = r
         r = inputOrgList[r]
         p = crossNextGen[p]
+        #deletes old genome and replaces it wit crossover value
         r.genome = ''
         r.genome = p
+        #introduce mutations
+        r.generateMutation()
+        #gets new score and geneList values
         r.refreshGenes(r.genome)
         outputNewGene.append(r)
-    #for element in outputNewGene:
-        #print(element.genome)
+        #calculate total fitness score & append to end of list
+        global_fitness_score += r.score
+    outputNewGene.append(global_fitness_score)
     return outputNewGene
 
-def refreshGenes(newOrganisms):
+#lists organisms and their properties
+def showOrganisms(newOrganisms):
     for r in range(100):
         r = newOrganisms[r]
-        print(r.genome)
-        r.generateMutation()
-        print(r.genome)
-
+        #print(r.genome, r.score)
+    print newOrganisms[100]
 
 def initialGeneration():
     global_fitness_score = 0
@@ -461,10 +463,11 @@ def initialGeneration():
         print(i.name, i.genome, i.genelist, i.score)
     #total fitness level appended to the end of the list (position 100)
     organismlist.append(global_fitness_score)
+    print(global_fitness_score)
     return organismlist
 
 def newGeneration(inputOrgList):
-
+    global_fitness_score = 0
     #select organisms for reproduction
     nextGenList = selectNextGeneration(inputOrgList)
     #crossover and get new organisms
@@ -472,7 +475,9 @@ def newGeneration(inputOrgList):
     #insert new genes into old organisms & mutate
     newOrganisms = insertnewGenes(inputOrgList, newGeneList)
     #refresh genes and get new scores
-    refreshGenes(newOrganisms)
+    showOrganisms(newOrganisms)
+
+    return newOrganisms
 
 
 
@@ -480,11 +485,10 @@ def main():
     initialGeneration()
     initialOrgList = initialGeneration()
 
-    newGeneration(initialOrgList)
+    iterate = newGeneration(initialOrgList)
+    temp = iterate
+    for i in range(50):
+        temp2 = newGeneration(temp)
+        temp = temp2
 
 if __name__ == "__main__": main()
-
-#print org1.sequence
-
-#for row in c.execute('SELECT * FROM gene WHERE BinaryEncoding =?', t):
-#    print row
