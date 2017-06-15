@@ -1,14 +1,20 @@
 import sys, getopt, os, random, math
 from random import randint
 from decimal import *
+from collections import deque
+from Bio import Phylo, AlignIO
+from Bio.Phylo.Applications import PhymlCommandline
+from Bio.File import as_handle
 import sqlite3
 conn = sqlite3.connect('gene')
 
 class Organism:
 
     genome = ''
+    dnaGenome = ''
     score = 0
     genelist = []
+    isParent = False
 
     #initialize constructor
     def __init__(self, name):
@@ -17,12 +23,14 @@ class Organism:
         #fix switch for abr and meta
         self.score = self.getScore(False, False)
         self.genelist = self.getGenes()
+        self.dnaGenome = self.converttoDNA()
 
     #refresh variables when new generation is produced
     def refreshGenes(self, genome):
         self.genome = genome
         self.score = self.getScore(False, False)
         self.genelist = self.getGenes()
+        self.dnaGenome = self.converttoDNA()
 
     #generate genome for initial populations
     def createGenome(self):
@@ -90,6 +98,312 @@ class Organism:
         sequence += gene10
 
         return sequence
+
+
+    def converttoDNA(self):
+        test = ''
+        temp1 = self.genome[0:2]
+        temp2 = self.genome[2:4]
+        temp3 = self.genome[4:6]
+        temp4 = self.genome[6:8]
+        temp5 = self.genome[8:10]
+        temp6 = self.genome[10:12]
+        temp7 = self.genome[12:14]
+        temp8 = self.genome[14:16]
+        temp9 = self.genome[16:18]
+        temp10 = self.genome[18:20]
+        temp11 = self.genome[20:22]
+        temp12 = self.genome[22:24]
+        temp13 = self.genome[24:26]
+        temp14 = self.genome[26:28]
+        temp15 = self.genome[28:30]
+        temp16 = self.genome[30:32]
+        temp17 = self.genome[32:34]
+        temp18 = self.genome[34:36]
+        temp19 = self.genome[36:38]
+        temp20 = self.genome[38:40]
+        temp21 = self.genome[40:42]
+        temp22 = self.genome[42:44]
+        temp23 = self.genome[44:46]
+        temp24 = self.genome[46:48]
+        temp25 = self.genome[48:50]
+        temp26 = self.genome[50:52]
+        temp27 = self.genome[52:54]
+        temp28 = self.genome[54:56]
+        temp29 = self.genome[56:58]
+        temp30 = self.genome[58:60]
+
+        if(temp1 == '00'):
+            test += 'A'
+        elif(temp1 == '01'):
+            test += 'C'
+        elif(temp1 == '10'):
+            test += 'G'
+        elif(temp1 == '11'):
+            test += 'T'
+
+        if(temp2 == '00'):
+            test += 'A'
+        elif(temp2 == '01'):
+            test += 'C'
+        elif(temp2 == '10'):
+            test += 'G'
+        elif(temp2 == '11'):
+            test += 'T'
+
+        if(temp3 == '00'):
+            test += 'A'
+        elif(temp3 == '01'):
+            test += 'C'
+        elif(temp3 == '10'):
+            test += 'G'
+        elif(temp3 == '11'):
+            test += 'T'
+
+        if(temp4 == '00'):
+            test += 'A'
+        elif(temp4 == '01'):
+            test += 'C'
+        elif(temp4 == '10'):
+            test += 'G'
+        elif(temp4 == '11'):
+            test += 'T'
+
+        if(temp5 == '00'):
+            test += 'A'
+        elif(temp5 == '01'):
+            test += 'C'
+        elif(temp5 == '10'):
+            test += 'G'
+        elif(temp5 == '11'):
+            test += 'T'
+
+        if(temp6 == '00'):
+            test += 'A'
+        elif(temp6 == '01'):
+            test += 'C'
+        elif(temp6 == '10'):
+            test += 'G'
+        elif(temp6 == '11'):
+            test += 'T'
+
+        if(temp7 == '00'):
+            test += 'A'
+        elif(temp7 == '01'):
+            test += 'C'
+        elif(temp7 == '10'):
+            test += 'G'
+        elif(temp7 == '11'):
+            test += 'T'
+
+        if(temp8 == '00'):
+            test += 'A'
+        elif(temp8 == '01'):
+            test += 'C'
+        elif(temp8 == '10'):
+            test += 'G'
+        elif(temp8 == '11'):
+            test += 'T'
+
+        if(temp9 == '00'):
+            test += 'A'
+        elif(temp9 == '01'):
+            test += 'C'
+        elif(temp9 == '10'):
+            test += 'G'
+        elif(temp9 == '11'):
+            test += 'T'
+
+        if(temp10 == '00'):
+            test += 'A'
+        elif(temp10 == '01'):
+            test += 'C'
+        elif(temp10 == '10'):
+            test += 'G'
+        elif(temp10 == '11'):
+            test += 'T'
+
+        if(temp11 == '00'):
+            test += 'A'
+        elif(temp11 == '01'):
+            test += 'C'
+        elif(temp11 == '10'):
+            test += 'G'
+        elif(temp11 == '11'):
+            test += 'T'
+
+        if(temp12 == '00'):
+            test += 'A'
+        elif(temp12 == '01'):
+            test += 'C'
+        elif(temp12 == '10'):
+            test += 'G'
+        elif(temp12 == '11'):
+            test += 'T'
+
+        if(temp13 == '00'):
+            test += 'A'
+        elif(temp13 == '01'):
+            test += 'C'
+        elif(temp13 == '10'):
+            test += 'G'
+        elif(temp13 == '11'):
+            test += 'T'
+
+        if(temp14 == '00'):
+            test += 'A'
+        elif(temp14 == '01'):
+            test += 'C'
+        elif(temp14 == '10'):
+            test += 'G'
+        elif(temp14 == '11'):
+            test += 'T'
+
+        if(temp15 == '00'):
+            test += 'A'
+        elif(temp15 == '01'):
+            test += 'C'
+        elif(temp15 == '10'):
+            test += 'G'
+        elif(temp15 == '11'):
+            test += 'T'
+
+        if(temp16 == '00'):
+            test += 'A'
+        elif(temp16 == '01'):
+            test += 'C'
+        elif(temp16 == '10'):
+            test += 'G'
+        elif(temp16 == '11'):
+            test += 'T'
+
+        if(temp17 == '00'):
+            test += 'A'
+        elif(temp17 == '01'):
+            test += 'C'
+        elif(temp17 == '10'):
+            test += 'G'
+        elif(temp17 == '11'):
+            test += 'T'
+
+        if(temp18 == '00'):
+            test += 'A'
+        elif(temp18 == '01'):
+            test += 'C'
+        elif(temp18 == '10'):
+            test += 'G'
+        elif(temp18 == '11'):
+            test += 'T'
+
+        if(temp19 == '00'):
+            test += 'A'
+        elif(temp19 == '01'):
+            test += 'C'
+        elif(temp19 == '10'):
+            test += 'G'
+        elif(temp19 == '11'):
+            test += 'T'
+
+        if(temp20 == '00'):
+            test += 'A'
+        elif(temp20 == '01'):
+            test += 'C'
+        elif(temp20 == '10'):
+            test += 'G'
+        elif(temp20 == '11'):
+            test += 'T'
+
+        if(temp21 == '00'):
+            test += 'A'
+        elif(temp21 == '01'):
+            test += 'C'
+        elif(temp21 == '10'):
+            test += 'G'
+        elif(temp21 == '11'):
+            test += 'T'
+
+        if(temp22 == '00'):
+            test += 'A'
+        elif(temp22 == '01'):
+            test += 'C'
+        elif(temp22 == '10'):
+            test += 'G'
+        elif(temp22 == '11'):
+            test += 'T'
+
+        if(temp23 == '00'):
+            test += 'A'
+        elif(temp23 == '01'):
+            test += 'C'
+        elif(temp23 == '10'):
+            test += 'G'
+        elif(temp23 == '11'):
+            test += 'T'
+
+        if(temp24 == '00'):
+            test += 'A'
+        elif(temp24 == '01'):
+            test += 'C'
+        elif(temp24 == '10'):
+            test += 'G'
+        elif(temp24 == '11'):
+            test += 'T'
+
+        if(temp25 == '00'):
+            test += 'A'
+        elif(temp25 == '01'):
+            test += 'C'
+        elif(temp25 == '10'):
+            test += 'G'
+        elif(temp25 == '11'):
+            test += 'T'
+
+        if(temp26 == '00'):
+            test += 'A'
+        elif(temp26 == '01'):
+            test += 'C'
+        elif(temp26 == '10'):
+            test += 'G'
+        elif(temp26 == '11'):
+            test += 'T'
+
+        if(temp27 == '00'):
+            test += 'A'
+        elif(temp27 == '01'):
+            test += 'C'
+        elif(temp27 == '10'):
+            test += 'G'
+        elif(temp27 == '11'):
+            test += 'T'
+
+        if(temp28 == '00'):
+            test += 'A'
+        elif(temp28 == '01'):
+            test += 'C'
+        elif(temp28 == '10'):
+            test += 'G'
+        elif(temp28 == '11'):
+            test += 'T'
+
+        if(temp29 == '00'):
+            test += 'A'
+        elif(temp29 == '01'):
+            test += 'C'
+        elif(temp29 == '10'):
+            test += 'G'
+        elif(temp29 == '11'):
+            test += 'T'
+
+        if(temp30 == '00'):
+            test += 'A'
+        elif(temp30 == '01'):
+            test += 'C'
+        elif(temp30 == '10'):
+            test += 'G'
+        elif(temp30 == '11'):
+            test += 'T'
+
+        return test
 
     #given a genome and environmental variables, determine an organisms fitness score
     def getScore(self, switch1, switch2):
@@ -316,9 +630,9 @@ class Organism:
         j = 0
         while j < len(self.genome):
              temp_letter = self.genome[j]
-             lucky_number = randint(1,200)
+             lucky_number = randint(1,500)
              #picks number between 1 and 60. If number = 36, flips 0 to 1 or vice versa.
-             if(lucky_number == 36):
+             if(lucky_number == 45):
                 if(self.genome[j] == '0'):
                     temp_genome += '1'
                 else:
@@ -337,6 +651,21 @@ class Organism:
         else:
             tempp_score = self.score
         return tempp_score
+
+def createFasta(inputList):
+    file = open("phylogenetics.fasta", 'w')
+    for s in range(100):
+        s = inputList[s]
+        file.write(">" + s.name + '\n')
+        file.write(s.dnaGenome + '\n')
+    file.close()
+    #egfr_tree = Phylo.read("phylogenetics.fasta", "newick")
+    #Phylo.draw_ascii(egfr_tree)
+    align = AlignIO.read("phylogenetics.fasta", "fasta")
+    print(align)
+    cmdline = PhymlCommandline(input='phylogenetics.fasta', datatype='nt', model='WAG', alpha='e', bootstrap=100)
+    out_log, err_log = cmdline()
+
 
 #selects genes in current generation to reproduce for next generation
 def selectNextGeneration(inputOrgList):
@@ -419,6 +748,7 @@ def crossOver(inputOrgList, nextGenList):
                 genename10 = entry2.genome[54:60]
 
             newSequence = (genename1 + genename2 + genename3 + genename4 + genename5 + genename6 + genename7 + genename8 + genename9 + genename10)
+
             crossNextGen.append(newSequence)
 
     return crossNextGen
@@ -426,9 +756,11 @@ def crossOver(inputOrgList, nextGenList):
 #replaces the 100 previous organism's genomes with tose produced from crossover(). Also mutates.
 def insertnewGenes(inputOrgList, crossNextGen):
     outputNewGene = []
+
     global_fitness_score = 0
     for r in range(100):
         p = r
+
         r = inputOrgList[r]
         p = crossNextGen[p]
         #deletes old genome and replaces it wit crossover value
@@ -445,11 +777,10 @@ def insertnewGenes(inputOrgList, crossNextGen):
     return outputNewGene
 
 #lists organisms and their properties
-def showOrganisms(newOrganisms):
-    for r in range(100):
-        r = newOrganisms[r]
-        #print(r.genome, r.score)
-    print newOrganisms[100]
+def showOrganisms(newOrganisms, k):
+    print('Generation ' + str(k) + ' complete!')
+    print(newOrganisms[100])
+
 
 def initialGeneration():
     global_fitness_score = 0
@@ -457,16 +788,16 @@ def initialGeneration():
     organismlist = []
 
     for i in range(100):
-        i = Organism('Organism ' + str(i+1))
+        i = Organism('Organism_' + str(i+1))
         global_fitness_score += i.updateTotalScore()
         organismlist.append(i)
-        print(i.name, i.genome, i.genelist, i.score)
+        #print(i.name, i.genome, i.genelist, i.score)
     #total fitness level appended to the end of the list (position 100)
     organismlist.append(global_fitness_score)
     print(global_fitness_score)
     return organismlist
 
-def newGeneration(inputOrgList):
+def newGeneration(inputOrgList, counter):
     global_fitness_score = 0
     #select organisms for reproduction
     nextGenList = selectNextGeneration(inputOrgList)
@@ -475,20 +806,31 @@ def newGeneration(inputOrgList):
     #insert new genes into old organisms & mutate
     newOrganisms = insertnewGenes(inputOrgList, newGeneList)
     #refresh genes and get new scores
-    showOrganisms(newOrganisms)
+    showOrganisms(newOrganisms, counter)
 
     return newOrganisms
 
 
 
 def main():
-    initialGeneration()
+    #generate initial organism list
     initialOrgList = initialGeneration()
-
-    iterate = newGeneration(initialOrgList)
+    createFasta(initialOrgList)
+    test = selectNextGeneration(initialOrgList)
+    for element in test:
+        print element.name
+    counter = 1
+    iterate = newGeneration(initialOrgList, counter)
     temp = iterate
-    for i in range(50):
-        temp2 = newGeneration(temp)
+    counter = 2
+    for i in range(5):
+        temp2 = newGeneration(temp, counter)
         temp = temp2
+        counter += 1
+    for element in temp:
+        try:
+            print(element.dnaGenome)
+        except:
+            print(element)
 
 if __name__ == "__main__": main()
