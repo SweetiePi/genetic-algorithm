@@ -1,2 +1,2 @@
 # genetic-algorithm
-Demonstrating genetic algorithms on fictional bacterial populations
+Demonstrating genetic algorithms on simulated bacterial populations
